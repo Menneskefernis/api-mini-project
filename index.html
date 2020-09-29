@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Mini Project</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="content">
+        <form>
+            <input type="text" id="search-field" name="search-field">
+            <button type="submit" id="search-btn">SEARCH</button>
+        </form>
+        <p id="error-msg"></p>
+        <img src="#">
+        <button id="new-image-btn">NEW IMAGE</button>
+    </div>
+
+    <script>
+        const img = document.querySelector('img');
+        const newImageBtn = document.getElementById('new-image-btn');
+        const searchField = document.getElementById('search-field');
+        const searchBtn = document.getElementById('search-btn');
+        const errorMessage = document.getElementById('error-msg');
+
+        let query = 'cats';
+
+        function setNewGIF(query='cats') {
+            fetch(`https://api.giphy.com/v1/gifs/translate?api_key=uDGCA6SyrLEPPB4HTGhFNBvOscgo7ioK&s=${query}`, {mode: 'cors'})
+                .then((response) => {
+                    return response.json();
+                })
+                .then((response) => {
+                    img.src = response.data.images.original.url;
+                })
+                .catch((err) => {
+                    errorMessage.textContent = `An error occurred: ${err}`;
+                });
+        }
+
+        function handleQuery(e) {
+            e.preventDefault();
+            errorMessage.textContent = '';
+            query = searchField.value;
+            setNewGIF(query);
+        }
+
+        newImageBtn.addEventListener('click', () => { setNewGIF(query) });
+        searchBtn.addEventListener('click', handleQuery);
+
+        setNewGIF(query);
+    </script>
+</body>
+</html>
